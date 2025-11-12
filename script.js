@@ -12,14 +12,24 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Navbar scroll effect
+// Navbar scroll effect - FIXED VERSION
+let lastScrollTop = 0;
+const navbar = document.querySelector('.navbar');
+const navbarHeight = navbar.offsetHeight;
+
 window.addEventListener('scroll', function() {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 100) {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Add shadow when scrolled
+    if (scrollTop > 100) {
         navbar.classList.add('scrolled');
     } else {
         navbar.classList.remove('scrolled');
     }
+    
+    // Show/hide navbar on scroll - REMOVED THIS FEATURE
+    // Navbar will always stay visible now
+    lastScrollTop = scrollTop;
 });
 
 // Active navigation highlighting
@@ -35,10 +45,10 @@ function setActiveNavLink() {
     });
 }
 
-// Intersection Observer for scroll animations
+// Intersection Observer for animations
 const observerOptions = {
     threshold: 0.15,
-    rootMargin: '0px 0px -60px 0px'
+    rootMargin: '0px 0px -50px 0px'
 };
 
 const observer = new IntersectionObserver(function(entries) {
@@ -78,61 +88,31 @@ function initializeAnimations() {
         card.style.transition = `opacity 0.6s ease ${index * 0.2}s, transform 0.6s ease ${index * 0.2}s`;
         observer.observe(card);
     });
-    
-    // Animate hero content
-    const heroContent = document.querySelector('.hero-content');
-    if (heroContent) {
-        heroContent.style.opacity = '0';
-        heroContent.style.transform = 'translateY(30px)';
-        heroContent.style.transition = 'opacity 1s ease 0.4s, transform 1s ease 0.4s';
-        
-        setTimeout(() => {
-            heroContent.style.opacity = '1';
-            heroContent.style.transform = 'translateY(0)';
-        }, 400);
-    }
 }
 
 // Add interactive button effects
 function initializeButtonEffects() {
     document.querySelectorAll('.cta-button, .service-link, .contact-btn').forEach(button => {
         button.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px) scale(1.02)';
+            this.style.transform = 'translateY(-2px)';
         });
         
         button.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-        
-        button.addEventListener('mousedown', function() {
-            this.style.transform = 'translateY(1px) scale(0.98)';
-        });
-        
-        button.addEventListener('mouseup', function() {
-            this.style.transform = 'translateY(-2px) scale(1.02)';
+            this.style.transform = 'translateY(0)';
         });
     });
 }
 
 // Initialize everything when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Initializing Flexinite Studio...');
+    console.log('🚀 Flexinite Studio Initialized!');
     
     setActiveNavLink();
     initializeAnimations();
     initializeButtonEffects();
-    
-    console.log('✅ Flexinite Studio Initialized!');
-});
-
-// Handle responsive behavior
-window.addEventListener('resize', function() {
-    // Re-initialize animations on resize
-    setTimeout(initializeAnimations, 150);
 });
 
 // Handle page load completion
 window.addEventListener('load', function() {
-    // Additional optimizations after all resources load
     document.body.classList.add('loaded');
 });
